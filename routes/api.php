@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostsAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('v1')->group(function () {
+    Route::prefix('posts')->group(function () {
+        Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.create');
+        Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
+    });
 });
