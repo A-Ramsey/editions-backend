@@ -15,14 +15,17 @@ use App\Http\Controllers\PostsAPIController;
 |
 */
 
+/**
+ * NOTE: WHOLE OF THIS FILE IS api-v1
+ *
+ * VERCEL CAN'T HANDLE HAVING OTHER /api meant it ended up being /api/api
+ * To add a new version of the api add a new routes file and register it in app/Providers/RouteServiceProvider.php
+ */
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//v1 api
-Route::prefix('v1')->group(function () {
-    Route::prefix('posts')->group(function () {
-        Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.create');
-        Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
-    });
+Route::prefix('posts')->group(function () {
+    Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.create');
+    Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
 });
