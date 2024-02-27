@@ -49,7 +49,7 @@ class User extends Authenticatable
     {
         return [
             'name' => ($create ? 'required' : "") . '|string|min:3|max:255',
-            'email' => 'required|email|' . ($create ? 'unique' : 'exists') . ':users,email',
+            'email' => ($create ? 'required' : "") . '|email|' . ($create ? 'unique' : 'exists') . ':users,email',
             'password' => [($create ? 'required' : ""), Password::min(8)
                     ->letters()->mixedCase()->numbers()->symbols()
                 ]
