@@ -28,8 +28,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('posts')->group(function () {
-    Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.create');
-    Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
+    Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
+    });
 });
 
 Route::prefix('user')->group(function () {
