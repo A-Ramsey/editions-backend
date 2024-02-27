@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\LoginAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsAPIController;
+use App\Http\Controllers\UserAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,12 @@ Route::prefix('posts')->group(function () {
     Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.create');
     Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
 });
+
+Route::prefix('user')->group(function () {
+    Route::post('create', [UserAPIController::class, 'store'])->name('api.v1.users.create');
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::patch('edit', [UserAPIController::class, 'update'])->name('api.v1.users.edit');
+    });
+});
+
+Route::post('login', LoginAPIController::class);

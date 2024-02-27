@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function rules(bool $create = false)
+    {
+        return [
+            'name' => ($create ? 'required' : "") . '|string|min:3|max:255',
+            'email' => 'required|email|' . ($create ? 'unique' : 'exists') . ':users,email',
+            'password' => [($create ? 'required' : ""), Password::min(8)
+                    ->letters()->mixedCase()->numbers()->symbols()
+                ]
+        ];
+    }
 }
