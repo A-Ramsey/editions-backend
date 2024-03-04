@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -18,16 +16,39 @@ class PostsAPIController extends Controller
         return response()->json($posts);
     }
 
+    public function outbox(): JsonResponse
+    {
+        $posts = Auth::user()->posts->toQuery()->whereDate('created_at', Date::today())->get();
+
+        return response()->json($posts);
+    }
+
     public function create(): JsonResponse
     {
-        $validated = request()->validate([
-            'content' => 'string|max:1000|min:1'
-        ]);
+        $validated = request()->validate(Post::rules());
 
         $post = Post::create($validated);
         $post->user()->associate(Auth::user());
         $post->save();
 
+        return response()->json($post);
+    }
+
+    public function update(Post $post): JsonResponse
+    {
+        if ($post->user == null || $post->user->id == Auth::user()->id) {
+            return response()->json(['success' => false, 'message' => 'You do not own this post']);
+        }
+        $validated = request()->validate(Post::rules());
+
+        $post->content = $validated['content'];
+        $post->save();
+
+        return response()->json($post);
+    }
+
+    public function show(Post $post): JsonResponse
+    {
         return response()->json($post);
     }
 }

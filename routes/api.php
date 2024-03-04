@@ -31,7 +31,10 @@ Route::prefix('posts')->group(function () {
     Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
+        Route::get('outbox', [PostsAPIController::class, 'outbox'])->name('api.v1.posts.outbox');
+        Route::patch('{post}/update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
     });
+    Route::get('{post}', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
 });
 
 Route::prefix('user')->group(function () {

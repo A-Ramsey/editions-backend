@@ -14,6 +14,13 @@ class Post extends Model
         'content'
     ];
 
+    public static function rules()
+    {
+        return [
+            'content' => 'string|max:1000|min:1',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
