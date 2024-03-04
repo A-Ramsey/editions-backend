@@ -37,7 +37,7 @@ Route::prefix('posts')->group(function () {
         Route::delete('{post}/delete', [PostsAPIController::class, 'delete'])->name('api.v1.posts.delete');
     });
     Route::prefix('{post}')->group(function () {
-        Route::post('react', ReactionAPIController::class)->name('api.v1.posts.react');
+        Route::post('react', ReactionAPIController::class)->middleware('auth:sanctum')->name('api.v1.posts.react');
         Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
     });
 });
