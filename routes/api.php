@@ -33,6 +33,7 @@ Route::prefix('posts')->group(function () {
         Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
         Route::get('outbox', [PostsAPIController::class, 'outbox'])->name('api.v1.posts.outbox');
         Route::patch('{post}/update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
+        Route::delete('{post}/delete', [PostsAPIController::class, 'delete'])->name('api.v1.posts.delete');
     });
     Route::get('{post}', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
 });

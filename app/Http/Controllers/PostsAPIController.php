@@ -51,4 +51,14 @@ class PostsAPIController extends Controller
     {
         return response()->json($post);
     }
+
+    public function delete(Post $post) : JsonResponse
+    {
+        if (Auth::user()->id != $post->user->id) {
+            return response()->json(['success' => false, 'message' => 'You don\'t own this post']);
+        }
+        $post->delete();
+
+        return response()->json(['success' => true, 'message' => 'Post deleted']);
+    }
 }
