@@ -18,7 +18,7 @@ class PostsAPIController extends Controller
 
     public function outbox(): JsonResponse
     {
-        $posts = Auth::user()->posts->toQuery()->whereDate('created_at', Date::today())->get();
+        $posts = Post::where('user_id', Auth::user()->id)->whereDate('created_at', Date::today())->get();
 
         return response()->json($posts);
     }

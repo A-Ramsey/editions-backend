@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\LoginAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostsAPIController;
 use App\Http\Controllers\UserAPIController;
+use App\Http\Controllers\LoginAPIController;
+use App\Http\Controllers\PostsAPIController;
+use App\Http\Controllers\ReactionAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,10 @@ Route::prefix('posts')->group(function () {
         Route::patch('{post}/update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
         Route::delete('{post}/delete', [PostsAPIController::class, 'delete'])->name('api.v1.posts.delete');
     });
-    Route::get('{post}', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
+    Route::prefix('{post}')->group(function () {
+        Route::post('react', ReactionAPIController::class)->name('api.v1.posts.react');
+        Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
+    });
 });
 
 Route::prefix('user')->group(function () {
