@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostRefreshTimeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAPIController;
@@ -27,6 +28,8 @@ use App\Http\Controllers\ReactionAPIController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('post-refresh-time', PostRefreshTimeController::class)->name('api.v1.expiry-time');
 
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
