@@ -36,7 +36,7 @@ class PostsAPIController extends Controller
 
     public function update(Post $post): JsonResponse
     {
-        if ($post->user == null || $post->user->id == Auth::user()->id) {
+        if ($post->user == null || $post->user->id != Auth::user()->id) {
             return response()->json(['success' => false, 'message' => 'You do not own this post']);
         }
         $validated = request()->validate(Post::rules());

@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
+use App\Traits\Commentable;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Commentable;
 
     protected $fillable = [
         'content'
     ];
 
     protected $appends = [
-        'reactionsCount',
+        'reactionCount',
+        'commentCount',
     ];
 
     public static function rules()
@@ -38,8 +41,13 @@ class Post extends Model
         return $this->morphToMany(User::class, 'reactable');
     }
 
-    protected function getReactionsCountAttribute(): int
+    protected function getReactionCountAttribute(): int
     {
         return $this->reactable->count();
+    }
+
+    protected function getCommentCountAttribute(): int
+    {
+        return $this->comments->count();
     }
 }

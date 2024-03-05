@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\PostRefreshTimeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAPIController;
 use App\Http\Controllers\LoginAPIController;
 use App\Http\Controllers\PostsAPIController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\ReactionAPIController;
+use App\Http\Controllers\PostRefreshTimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,11 +37,14 @@ Route::prefix('posts')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
         Route::get('outbox', [PostsAPIController::class, 'outbox'])->name('api.v1.posts.outbox');
-        Route::patch('{post}/update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
-        Route::delete('{post}/delete', [PostsAPIController::class, 'delete'])->name('api.v1.posts.delete');
     });
     Route::prefix('{post}')->group(function () {
-        Route::post('react', ReactionAPIController::class)->middleware('auth:sanctum')->name('api.v1.posts.react');
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::patch('update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
+            Route::delete('delete', [PostsAPIController::class, 'delete'])->name('api.v1.posts.delete');
+            Route::post('react', ReactionAPIController::class)->name('api.v1.posts.react');
+            Route::post('comment', PostCommentController::class)->name('api.v1.posts.comment');
+        });
         Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
     });
 });
