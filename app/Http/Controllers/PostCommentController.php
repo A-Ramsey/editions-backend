@@ -11,9 +11,7 @@ class PostCommentController extends Controller
 {
     public function __invoke(Post $post)
     {
-        $validated = request()->validate([
-            'content' => 'string|max:1000|min:1'
-        ]);
+        $validated = request()->validate(Comment::rules());
 
         $comment = Comment::create($validated);
         $comment->user()->associate(Auth::user());

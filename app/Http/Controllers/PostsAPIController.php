@@ -49,7 +49,7 @@ class PostsAPIController extends Controller
 
     public function show(Post $post): JsonResponse
     {
-        return response()->json($post);
+        return response()->json($post::with('user')->find($post->id));
     }
 
     public function delete(Post $post) : JsonResponse

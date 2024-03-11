@@ -38,7 +38,7 @@ class Post extends Model
 
     public function reactable(): MorphToMany
     {
-        return $this->morphToMany(User::class, 'reactable');
+        return $this->morphToMany(User::class, 'reactable')->withTimestamps();
     }
 
     protected function getReactionCountAttribute(): int

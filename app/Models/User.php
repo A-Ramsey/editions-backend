@@ -64,6 +64,6 @@ class User extends Authenticatable
 
     public function postReactions(): MorphToMany
     {
-        return $this->morphedByMany(Post::class, 'reactable');
+        return $this->morphedByMany(Post::class, 'reactable')->withTimestamps();
     }
 }

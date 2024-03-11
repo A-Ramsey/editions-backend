@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentsAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAPIController;
@@ -46,6 +47,15 @@ Route::prefix('posts')->group(function () {
             Route::post('comment', PostCommentController::class)->name('api.v1.posts.comment');
         });
         Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
+    });
+});
+
+Route::prefix('comments')->group(function () {
+    Route::prefix('{comment}')->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::patch('update', [CommentsAPIController::class, 'update'])->name('api.v1.comments.update');
+            Route::delete('delete', [CommentsAPIController::class, 'delete'])->name('api.v1.comments.delete');
+        });
     });
 });
 
