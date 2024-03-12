@@ -31,11 +31,15 @@ class PostsAPIController extends Controller
         $post = Post::create($validated);
         $post->user()->associate(Auth::user());
 
-        foreach (request()->validate(['images' => 'array'])["images"] as $imgId) {
-            $image = Image::find($imgId);
-            if ($image->ownedByAuthUser()) {
-                $image->imageable()->associate($post);
-                $image->save();
+        $images = collect(request()->validate(['images' => 'array']));
+        if ($images->has('images')) {
+            $images = $images['images'];
+            foreach ($images as $imgId) {
+                $image = Image::find($imgId);
+                if ($image->ownedByAuthUser()) {
+                    $image->imageable()->associate($post);
+                    $image->save();
+                }
             }
         }
 
@@ -53,7 +57,8 @@ class PostsAPIController extends Controller
 
         $post->content = $validated['content'];
 
-        $images = collect(request()->validate(['images' => 'array'])["images"]);
+        $images = collect(request()->validate(['images' => 'array']));
+        $images = $images["images"] ?? collect([]);
         foreach ($images as $imgId) {
             $image = Image::find($imgId)->first();
             if (!$image->ownedByAuthUser()) {
