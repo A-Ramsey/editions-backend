@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\Reactable;
+use App\Traits\Commentable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use App\Traits\Commentable;
 
 class Comment extends Model
 {
-    use HasFactory, Commentable;
+    use HasFactory, Commentable, Reactable;
 
     protected $fillable = [
         'content',
     ];
 
     protected $appends = [
-        'commentCount'
+        'commentCount',
+        'reactionCount'
     ];
 
     public static function rules()

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Commentable;
+use App\Traits\Reactable;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
 {
-    use HasFactory, Commentable;
+    use HasFactory, Commentable, Reactable;
 
     protected $fillable = [
         'content'
@@ -34,15 +35,5 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function reactable(): MorphToMany
-    {
-        return $this->morphToMany(User::class, 'reactable')->withTimestamps();
-    }
-
-    protected function getReactionCountAttribute(): int
-    {
-        return $this->reactable->count();
     }
 }
