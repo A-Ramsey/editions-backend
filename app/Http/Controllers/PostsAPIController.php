@@ -11,14 +11,14 @@ class PostsAPIController extends Controller
 {
     public function index(): JsonResponse
     {
-        $posts = Post::with('user')->whereDate('created_at', Date::yesterday())->get();
+        $posts = Post::with('user')->with('comments.user')->whereDate('created_at', Date::yesterday())->get();
 
         return response()->json($posts);
     }
 
     public function outbox(): JsonResponse
     {
-        $posts = Post::where('user_id', Auth::user()->id)->whereDate('created_at', Date::today())->get();
+        $posts = Post::with('user')->with('comments.user')->where('user_id', Auth::user()->id)->whereDate('created_at', Date::today())->get();
 
         return response()->json($posts);
     }
@@ -49,7 +49,7 @@ class PostsAPIController extends Controller
 
     public function show(Post $post): JsonResponse
     {
-        return response()->json($post::with('user')->find($post->id));
+        return response()->json($post::with('user')->with('comments.user')->find($post->id));
     }
 
     public function delete(Post $post) : JsonResponse
