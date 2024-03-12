@@ -10,4 +10,9 @@ trait Commentable {
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    protected function getCommentCountAttribute(): int
+    {
+        return $this->comments->count();
+    }
 }

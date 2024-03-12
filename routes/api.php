@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentCommentController;
 use App\Http\Controllers\CommentsAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::prefix('comments')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::patch('update', [CommentsAPIController::class, 'update'])->name('api.v1.comments.update');
             Route::delete('delete', [CommentsAPIController::class, 'delete'])->name('api.v1.comments.delete');
+            Route::post('comment', CommentCommentController::class)->name('api.v1.comments.comment.create');
         });
     });
 });

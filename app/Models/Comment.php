@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use App\Traits\Commentable;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, Commentable;
 
     protected $fillable = [
         'content',
+    ];
+
+    protected $appends = [
+        'commentCount'
     ];
 
     public static function rules()

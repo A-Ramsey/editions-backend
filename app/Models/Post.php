@@ -45,9 +45,4 @@ class Post extends Model
     {
         return $this->reactable->count();
     }
-
-    protected function getCommentCountAttribute(): int
-    {
-        return $this->comments->count();
-    }
 }
