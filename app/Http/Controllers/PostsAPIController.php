@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Image;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -29,6 +30,15 @@ class PostsAPIController extends Controller
 
         $post = Post::create($validated);
         $post->user()->associate(Auth::user());
+
+        foreach (request()->validate(['images' => 'array'])["images"] as $imgId) {
+            $image = Image::find($imgId);
+            if ($image->ownedByAuthUser()) {
+                $image->imageable()->associate($post);
+                $image->save();
+            }
+        }
+
         $post->save();
 
         return response()->json($post);
@@ -42,6 +52,25 @@ class PostsAPIController extends Controller
         $validated = request()->validate(Post::rules());
 
         $post->content = $validated['content'];
+
+        $images = collect(request()->validate(['images' => 'array'])["images"]);
+        foreach ($images as $imgId) {
+            $image = Image::find($imgId)->first();
+            if (!$image->ownedByAuthUser()) {
+                continue;
+            }
+            $image->imageable()->associate($post);
+            $image->save();
+        }
+
+        foreach ($post->images as $image) {
+            if (!$images->contains($image->id)) {
+                $image->imageable()->dissociate($post);
+                $image->save();
+                continue;
+            }
+        }
+
         $post->save();
 
         return response()->json($post);

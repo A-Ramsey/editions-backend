@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentCommentController;
 use App\Http\Controllers\CommentReactionAPIController;
 use App\Http\Controllers\CommentsAPIController;
+use App\Http\Controllers\ImageAPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAPIController;
@@ -34,6 +35,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('post-refresh-time', PostRefreshTimeController::class)->name('api.v1.expiry-time');
+
+Route::prefix('images')->middleware('auth:sanctum')->group(function () {
+    Route::post('upload', [ImageAPIController::class, 'upload'])->name('api.v1.images.upload');
+});
 
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
@@ -71,3 +76,4 @@ Route::prefix('user')->group(function () {
 });
 
 Route::post('login', LoginAPIController::class);
+
