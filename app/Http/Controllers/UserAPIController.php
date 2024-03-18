@@ -32,9 +32,15 @@ class UserAPIController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        $user = User::where('id', $user->id)
+                    ->with('posts')
+                    ->with('comments')
+                    ->with('images')
+                    ->with('postReactions')
+                    ->get();
+        return response()->json($user);
     }
 
     /**

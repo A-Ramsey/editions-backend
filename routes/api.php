@@ -68,10 +68,11 @@ Route::prefix('comments')->group(function () {
     });
 });
 
-Route::prefix('user')->group(function () {
+Route::prefix('users')->group(function () {
     Route::post('create', [UserAPIController::class, 'store'])->name('api.v1.users.create');
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::patch('edit', [UserAPIController::class, 'update'])->name('api.v1.users.edit');
+        Route::get('{user}', [UserAPIController::class, 'show'])->name('api.v1.users.show');
     });
 });
 
