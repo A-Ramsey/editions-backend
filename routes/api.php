@@ -41,11 +41,11 @@ Route::prefix('images')->middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('posts')->group(function () {
-    Route::get('/{date?}', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
         Route::get('outbox', [PostsAPIController::class, 'outbox'])->name('api.v1.posts.outbox');
     });
+    Route::get('/{date?}', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
     Route::prefix('{post}')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::patch('update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
