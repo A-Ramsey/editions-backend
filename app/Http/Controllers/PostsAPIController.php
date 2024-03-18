@@ -10,8 +10,16 @@ use Illuminate\Support\Facades\Date;
 
 class PostsAPIController extends Controller
 {
-    public function index(): JsonResponse
+    public function index($date = null): JsonResponse
     {
+        if ($date == null) {
+            $date = Date::yesterday();
+        } else {
+            $date = Date::parse($date);
+        }
+        if ($date > Date::yesterday()) {
+            return response()->json(['success' => false, 'message' => 'Day must be older than today']);
+        }
         $posts = Post::with('user')->with('comments.user')->whereDate('created_at', Date::yesterday())->get();
 
         return response()->json($posts);
