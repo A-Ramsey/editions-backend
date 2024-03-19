@@ -45,7 +45,6 @@ Route::prefix('posts')->group(function () {
         Route::post('create', [PostsAPIController::class, 'create'])->name('api.v1.posts.create');
         Route::get('outbox', [PostsAPIController::class, 'outbox'])->name('api.v1.posts.outbox');
     });
-    Route::get('/{date?}', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
     Route::prefix('{post}')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::patch('update', [PostsAPIController::class, 'update'])->name('api.v1.posts.update');
@@ -55,6 +54,7 @@ Route::prefix('posts')->group(function () {
         });
         Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
     });
+    Route::get('/{date?}', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
 });
 
 Route::prefix('comments')->group(function () {
@@ -77,4 +77,3 @@ Route::prefix('users')->group(function () {
 });
 
 Route::post('login', LoginAPIController::class);
-
