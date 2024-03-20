@@ -52,7 +52,7 @@ Route::prefix('posts')->group(function () {
             Route::post('react', ReactionAPIController::class)->name('api.v1.posts.react');
             Route::post('comment', PostCommentController::class)->name('api.v1.posts.comment');
         });
-        Route::get('/', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
+        Route::get('/show', [PostsAPIController::class, 'show'])->name('api.v1.posts.show');
     });
     Route::get('/{date?}', [PostsAPIController::class, 'index'])->name('api.v1.posts.index');
 });
