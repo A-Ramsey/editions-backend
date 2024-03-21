@@ -20,7 +20,7 @@ class PostsAPIController extends Controller
         if ($date > Date::yesterday()) {
             return response()->json(['success' => false, 'message' => 'Day must be older than today']);
         }
-        $posts = Post::with('user')->with('comments.user')->whereDate('created_at', Date::yesterday())->get();
+        $posts = Post::with('user')->with('comments.user')->whereDate('created_at', $date)->get();
 
         return response()->json($posts);
     }
@@ -94,7 +94,7 @@ class PostsAPIController extends Controller
         return response()->json($post::with('user')->with('comments.user')->find($post->id));
     }
 
-    public function delete(Post $post) : JsonResponse
+    public function delete(Post $post): JsonResponse
     {
         if (Auth::user()->id != $post->user->id) {
             return response()->json(['success' => false, 'message' => 'You don\'t own this post']);
