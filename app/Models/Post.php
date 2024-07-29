@@ -8,6 +8,7 @@ use App\Traits\Reactable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
 
 class Post extends Model
 {
@@ -33,5 +34,10 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function onDate($date): Collection
+    {
+        return self::with('user')->with('comments.user')->whereDate('created_at', $date)->get();
     }
 }

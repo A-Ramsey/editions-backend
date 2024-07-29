@@ -20,7 +20,7 @@ class PostsAPIController extends Controller
         if ($date > Date::yesterday()) {
             return response()->json(['success' => false, 'message' => 'Day must be older than today']);
         }
-        $posts = Post::with('user')->with('comments.user')->whereDate('created_at', $date)->get();
+        $posts = Post::onDate($date);
 
         return response()->json($posts);
     }
@@ -39,17 +39,17 @@ class PostsAPIController extends Controller
         $post = Post::create($validated);
         $post->user()->associate(Auth::user());
 
-        $images = collect(request()->validate(['images' => 'array']));
-        if ($images->has('images')) {
-            $images = $images['images'];
-            foreach ($images as $imgId) {
-                $image = Image::find($imgId);
-                if ($image->ownedByAuthUser()) {
-                    $image->imageable()->associate($post);
-                    $image->save();
-                }
-            }
-        }
+        // $images = collect(request()->validate(['images' => 'array']));
+        // if ($images->has('images')) {
+        //     $images = $images['images'];
+        //     foreach ($images as $imgId) {
+        //         $image = Image::find($imgId);
+        //         if ($image->ownedByAuthUser()) {
+        //             $image->imageable()->associate($post);
+        //             $image->save();
+        //         }
+        //     }
+        // }
 
         $post->save();
 
